@@ -623,13 +623,13 @@
         }
         
         function copySynthesis() {
-            const timeLabels = ['moins d\'une seconde', 'une à trois secondes', 'trois à dix secondes', 'XT (score 3)', 'XT (score 4)'];
+            const timeLabels = ['0 (< 1 sec.)', '1 (1 à 3 sec.)', '2 (3 à 10 sec.)', '3 (Décompensation fréquente)', '4 (XT constant)'];
             
-            let text = 'Score de contrôle de Lactose\n';
-            text += 'LOIN : ';
+            let text = 'SCORE DE CONTRÔLE (Lactose)\n';
+            text += 'Loin : ';
             text += state.loin === null ? '—' : timeLabels[state.loin];
             text += '\n';
-            text += 'PRES : ';
+            text += 'Près : ';
             text += state.pres === null ? '—' : timeLabels[state.pres];
             text += '\n';
             
@@ -637,7 +637,9 @@
             const sfStr = state.sf.map(v => v === null ? '-' : v).join('');
             const sclStr = state.loin === null ? '-' : state.loin;
             const scpStr = state.pres === null ? '-' : state.pres;
-            
+            text += '\n';
+            text += 'SCORE SDI (Synthèse)';
+            text += '\n';
             text += `VS : ${vsStr} ; SF : ${sfStr} ; SCL : ${sclStr} ; SCP : ${scpStr}`;
             
             navigator.clipboard.writeText(text);
