@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évaluation des strabismes divergents intermittents</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f0 100%);
+            min-height: 100vh;
+            padding: 16px;
+            color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4a90a4 0%, #5fa8bb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .section-container {
+            border: 2px solid #c8e3ed;
+            border-radius: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: #4a90a4;
+            margin-bottom: 16px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c8e3ed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .copy-icon-btn {
+            background: linear-gradient(135deg, #5fa8bb 0%, #7bbfd1 100%);
+            border: none;
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .copy-icon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(95, 168, 187, 0.3);
+        }
+
+        .copy-icon-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .copy-icon-btn.blink {
+            animation: blink 1s ease-in-out 3;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .subsections-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .bloc {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .bloc-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #4a90a4;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c8e3ed;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .questions-container {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .questions-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .questions-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .questions-container::-webkit-scrollbar-thumb {
+            background: #c8e3ed;
+            border-radius: 2px;
+        }
+
+        .question {
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #e8f1f5;
+        }
+
+        .question:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .question-text {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #495057;
+            line-height: 1.3;
+        }
+
+        .options {
+            display: flex;
+            gap: 6px;
+        }
+
+        .option-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border: 2px solid #d8e8ee;
+            background: white;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #6c757d;
+        }
+
+        .option-btn:hover {
+            border-color: #5fa8bb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(95, 168, 187, 0.15);
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(135deg, #5fa8bb 0%, #7bbfd1 100%);
+            border-color: #5fa8bb;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(95, 168, 187, 0.25);
+        }
+
+        .control-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            flex: 1;
+            margin-bottom: 14px;
+            overflow-y: auto;
+        }
+
+        .control-card {
+            background: #f8fcfd;
+            padding: 16px;
+            border-radius: 10px;
+            border: 2px solid #e0eff4;
+            flex-shrink: 0;
+        }
+
+        .control-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .control-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .scale {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .scale-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #d8e8ee;
+            background: white;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #6c757d;
+        }
+
+        .scale-btn:hover {
+            border-color: #5fa8bb;
+            transform: translateY(-2px);
+        }
+
+        .scale-btn.selected {
+            background: linear-gradient(135deg, #5fa8bb 0%, #7bbfd1 100%);
+            border-color: #5fa8bb;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .scale-labels {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .scale-label {
+            flex: 1;
+            text-align: center;
+            font-size: 9px;
+            color: #95a5a6;
+            font-weight: 500;
+        }
+
+        .synthesis-display {
+            background: #f0f8fb;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #c8e3ed;
+            flex-shrink: 0;
+        }
+
+        .synthesis-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a90a4;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            text-align: center;
+        }
+
+        .reset-container {
+            text-align: center;
+            padding: 16px 0;
+            margin-top: -8px;
+        }
+
+        .reset-btn {
+            padding: 12px 40px;
+            background: linear-gradient(135deg, #eb9694 0%, #f5a9a7 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(235, 150, 148, 0.25);
+        }
+
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Évaluation des strabismes divergents intermittents</h1>
+        </header>
+
+        <div class="main-grid">
+            <!-- Section Questionnaire qualité de vie -->
+            <div class="section-container">
+                <div class="section-header">
+                    <span>Questionnaire qualité de vie</span>
+                    <button class="copy-icon-btn" id="copyQuestionnaire" onclick="copyInterrogatoire()" title="Copier le questionnaire">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="subsections-grid">
+                    <!-- Colonne 1: VS - Impact psychosocial -->
+                    <div class="bloc">
+                        <div class="bloc-title">Impact psychosocial (VS)</div>
+                        <div class="questions-container">
+                            <div class="question">
+                                <div class="question-text">Tu te rends compte que ton œil part parfois ?</div>
+                                <div class="options">
+                                    <button class="option-btn" onclick="selectOption('vs', 0, 0)">Non</button>
+                                    <button class="option-btn" onclick="selectOption('vs', 0, 1)">Rarement</button>
+                                    <button class="option-btn" onclick="selectOption('vs', 0, 2)">Souvent</button>
+                                </div>
+                            </div>
+                            <div class="question">
+                                <div class="question-text">Est-ce que ça te gêne ?</div>
+                                <div class="options">
+                                    <button class="option-btn" onclick="selectOption('vs', 1, 0)">Non</button>
+                                    <button class="option-btn" onclick="selectOption('vs', 1, 1)">Rarement</button>
+                                    <button class="option-btn" onclick="selectOption('vs', 1, 2)">Souvent</button>
+                                </div>
+                            </div>
+                            <div class="question">
+                                <div class="question-text">Est-ce que les autres t'en parlent ?</div>
+                                <div class="options">
+                                    <button class="option-btn" onclick="selectOption('vs', 2, 0)">Non</button>
+                                    <button class="option-btn" onclick="selectOption('vs', 2, 1)">Rarement</button>
+                                    <button class="option-btn" onclick="selectOption('vs', 2, 2)">Souvent</button>
+                                </div>
+                            </div>
+                            <div class="question">
+                                <div class="question-text">Tu évites de regarder les gens dans les yeux ?</div>
+                                <div class="options">
+                                    <button class="option-btn" onclick="selectOption('vs', 3, 0)">Non</button>
+                                    <button class="option-btn" onclick="selectOption('vs', 3, 1)">Rarement</button>
+                                    <button class="option-btn" onclick="selectOption('vs', 3, 2)">Souvent</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Colonne 2: SF - Signes fonctionnels -->
+                    <div class="bloc">
+                        <div class="bloc-title">Signes fonctionnels (SF)</div>
+                        <div class="questions-container">
+                            <div class="question">
+                                <div class="question-text">Tu fermes un œil à la lumière / dehors ?</div>
+                                <div class="options">
+                                    <button class="option-btn" onclick="selectOption('sf', 0, 0)">Non</button>
+                                    <button class="option-btn" onclick="selectOption('sf', 0, 1)">Rarement</button>
+                                    <button class="option-btn" onclick="selectOption('sf', 0, 2)">Souvent</button>
+                                </div>
+                            </div>
+                            <div class="question">
+                                <div class="question-text">Tu vois double ?</div>
+                                <div class="options">
+                                    <button class="option-btn" onclick="selectOption('sf', 1, 0)">Non</button>
+                                    <button class="option-btn" onclick="selectOption('sf', 1, 1)">Rarement</button>
+                                    <button class="option-btn" onclick="selectOption('sf', 1, 2)">Souvent</button>
+                                </div>
+                            </div>
+                            <div class="question">
+                                <div class="question-text">Tu es gêné(e) pour lire ou regarder un écran ?</div>
+                                <div class="options">
+                                    <button class="option-btn" onclick="selectOption('sf', 2, 0)">Non</button>
+                                    <button class="option-btn" onclick="selectOption('sf', 2, 1)">Rarement</button>
+                                    <button class="option-btn" onclick="selectOption('sf', 2, 2)">Souvent</button>
+                                </div>
+                            </div>
+                            <div class="question">
+                                <div class="question-text">Tu te sens maladroit(e) dans les activités ou le sport ?</div>
+                                <div class="options">
+                                    <button class="option-btn" onclick="selectOption('sf', 3, 0)">Non</button>
+                                    <button class="option-btn" onclick="selectOption('sf', 3, 1)">Rarement</button>
+                                    <button class="option-btn" onclick="selectOption('sf', 3, 2)">Souvent</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Score de contrôle (LACTOSE) -->
+            <div class="section-container">
+                <div class="section-header">
+                    <span>Score de contrôle (LACTOSE)</span>
+                    <button class="copy-icon-btn" id="copyControl" onclick="copySynthesis()" title="Copier la synthèse">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="bloc" style="flex: 1;">
+                    <div class="control-cards">
+                        <div class="control-card">
+                            <h3>Loin</h3>
+                            <div class="control-text">Si XXT : après 10 s de CT alterné, refusionne en :</div>
+                            <div class="scale">
+                                <button class="scale-btn" onclick="selectScale('loin', 0)" data-row="xxt">&lt;1 s</button>
+                                <button class="scale-btn" onclick="selectScale('loin', 1)" data-row="xxt">1–3 s</button>
+                                <button class="scale-btn" onclick="selectScale('loin', 2)" data-row="xxt">3–10 s</button>
+                                <button class="scale-btn" onclick="selectScale('loin', 3)" data-row="xxt">XT</button>
+                            </div>
+                            <div class="control-text" style="margin-top: 12px;">Si XT : après 10 s de CT alterné :</div>
+                            <div class="scale">
+                                <button class="scale-btn" onclick="selectScaleXT('loin', 3)" data-row="xt">XXT</button>
+                                <button class="scale-btn" onclick="selectScaleXT('loin', 4)" data-row="xt">XT</button>
+                            </div>
+                        </div>
+                        <div class="control-card">
+                            <h3>Près</h3>
+                            <div class="control-text">Si XXT : après 10 s de CT alterné, refusionne en :</div>
+                            <div class="scale">
+                                <button class="scale-btn" onclick="selectScale('pres', 0)" data-row="xxt">&lt;1 s</button>
+                                <button class="scale-btn" onclick="selectScale('pres', 1)" data-row="xxt">1–3 s</button>
+                                <button class="scale-btn" onclick="selectScale('pres', 2)" data-row="xxt">3–10 s</button>
+                                <button class="scale-btn" onclick="selectScale('pres', 3)" data-row="xxt">XT</button>
+                            </div>
+                            <div class="control-text" style="margin-top: 12px;">Si XT : après 10 s de CT alterné :</div>
+                            <div class="scale">
+                                <button class="scale-btn" onclick="selectScaleXT('pres', 3)" data-row="xt">XXT</button>
+                                <button class="scale-btn" onclick="selectScaleXT('pres', 4)" data-row="xt">XT</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="synthesis-display">
+                        <div class="synthesis-text" id="synthesisLine">VS : ---- ; SF : ---- ; SCL : - ; SCP : -</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="reset-container">
+            <button class="reset-btn" onclick="resetAll()">Réinitialiser</button>
+        </div>
+    </div>
+
+    <script>
+        const state = {
+            vs: [null, null, null, null],
+            sf: [null, null, null, null],
+            loin: null,
+            pres: null
+        };
+
+        function selectOption(category, questionIndex, value) {
+            state[category][questionIndex] = value;
+            
+            const blocIndex = category === 'vs' ? 0 : 1;
+            const bloc = document.querySelectorAll('.bloc')[blocIndex];
+            const questionsContainer = bloc.querySelector('.questions-container');
+            const question = questionsContainer.querySelectorAll('.question')[questionIndex];
+            const buttons = question.querySelectorAll('.option-btn');
+            
+            buttons.forEach((btn, idx) => {
+                btn.classList.toggle('selected', idx === value);
+            });
+            
+            updateSynthesisLine();
+            checkQuestionnaireComplete();
+        }
+
+        function selectScale(type, value) {
+            state[type] = value;
+            
+            const card = type === 'loin' ? 
+                document.querySelectorAll('.control-card')[0] : 
+                document.querySelectorAll('.control-card')[1];
+            const buttons = card.querySelectorAll('.scale-btn');
+            
+            buttons.forEach((btn) => {
+                btn.classList.remove('selected');
+            });
+            
+            buttons.forEach((btn) => {
+                const btnValue = parseInt(btn.getAttribute('onclick').match(/\d+\)/)[0]);
+                const btnRow = btn.getAttribute('data-row');
+                if (btnValue === value && btnRow === 'xxt') {
+                    btn.classList.add('selected');
+                }
+            });
+            
+            updateSynthesisLine();
+            checkControlComplete();
+        }
+
+        function selectScaleXT(type, value) {
+            state[type] = value;
+            
+            const card = type === 'loin' ? 
+                document.querySelectorAll('.control-card')[0] : 
+                document.querySelectorAll('.control-card')[1];
+            const buttons = card.querySelectorAll('.scale-btn');
+            
+            buttons.forEach((btn) => {
+                btn.classList.remove('selected');
+            });
+            
+            buttons.forEach((btn) => {
+                const onclickAttr = btn.getAttribute('onclick');
+                if (onclickAttr.includes('selectScaleXT')) {
+                    const btnValue = parseInt(onclickAttr.match(/\d+\)/)[0]);
+                    if (btnValue === value) {
+                        btn.classList.add('selected');
+                    }
+                }
+            });
+            
+            updateSynthesisLine();
+            checkControlComplete();
+        }
+
+        function checkQuestionnaireComplete() {
+            const allFilled = state.vs.every(v => v !== null) && state.sf.every(v => v !== null);
+            const copyBtn = document.getElementById('copyQuestionnaire');
+            if (allFilled) {
+                copyBtn.classList.add('blink');
+                setTimeout(() => copyBtn.classList.remove('blink'), 3000);
+            }
+        }
+
+        function checkControlComplete() {
+            const allFilled = state.loin !== null && state.pres !== null;
+            const copyBtn = document.getElementById('copyControl');
+            if (allFilled) {
+                copyBtn.classList.add('blink');
+                setTimeout(() => copyBtn.classList.remove('blink'), 3000);
+            }
+        }
+
+        function updateSynthesisLine() {
+            const vsStr = state.vs.map(v => v === null ? '-' : v).join('');
+            const sfStr = state.sf.map(v => v === null ? '-' : v).join('');
+            const sclStr = state.loin === null ? '-' : state.loin;
+            const scpStr = state.pres === null ? '-' : state.pres;
+            
+            document.getElementById('synthesisLine').textContent = 
+                `VS : ${vsStr} ; SF : ${sfStr} ; SCL : ${sclStr} ; SCP : ${scpStr}`;
+        }
+
+        function copyInterrogatoire() {
+            const labels = [
+                'Conscience de la déviation',
+                'Gêne ressentie',
+                'Remarques de l\'entourage',
+                'Évitement du regard / contact visuel'
+            ];
+            
+            const sfLabels = [
+                'Fermeture d\'un œil au soleil',
+                'Diplopie',
+                'Gêne en vision de près (lecture/écrans)',
+                'Maladresses (activités motrices / sportives)'
+            ];
+            
+            const values = ['Non', 'Rarement', 'Souvent'];
+            
+            let text = 'Impact psychosocial :\n';
+            state.vs.forEach((v, i) => {
+                text += `- ${labels[i]} : ${v === null ? '—' : values[v]}\n`;
+            });
+            
+            text += '\nSignes fonctionnels :\n';
+            state.sf.forEach((v, i) => {
+                text += `- ${sfLabels[i]} : ${v === null ? '—' : values[v]}\n`;
+            });
+            
+            navigator.clipboard.writeText(text);
+        }
+        
+        function copySynthesis() {
+            const timeLabels = ['moins d\'une seconde', 'une à trois secondes', 'trois à dix secondes', 'XT (score 3)', 'XT (score 4)'];
+            
+            let text = 'Score de contrôle de Lactose\n';
+            text += 'LOIN : ';
+            text += state.loin === null ? '—' : timeLabels[state.loin];
+            text += '\n';
+            text += 'PRES : ';
+            text += state.pres === null ? '—' : timeLabels[state.pres];
+            text += '\n';
+            
+            const vsStr = state.vs.map(v => v === null ? '-' : v).join('');
+            const sfStr = state.sf.map(v => v === null ? '-' : v).join('');
+            const sclStr = state.loin === null ? '-' : state.loin;
+            const scpStr = state.pres === null ? '-' : state.pres;
+            
+            text += `VS : ${vsStr} ; SF : ${sfStr} ; SCL : ${sclStr} ; SCP : ${scpStr}`;
+            
+            navigator.clipboard.writeText(text);
+        }
+
+        function resetAll() {
+            state.vs = [null, null, null, null];
+            state.sf = [null, null, null, null];
+            state.loin = null;
+            state.pres = null;
+            
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            document.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            updateSynthesisLine();
+        }
+
+        updateSynthesisLine();
+    </script>
+</body>
+</html>
