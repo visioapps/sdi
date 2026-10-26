@@ -1,545 +1,129 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Évaluation des strabismes divergents intermittents</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CKS4FL7F3J"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-CKS4FL7F3J');
-    </script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --primary: #2b6cb0;
-            --primary-dark: #2c5282;
-            --teal: #319795;
-            --teal-light: #38b2ac;
-            --bg-grad-1: #eef4fb;
-            --bg-grad-2: #e3f0f1;
-            --ink: #2d3748;
-            --ink-soft: #4a5568;
-            --muted: #718096;
-            --border: #d9e6ef;
-            --chip: #eef3f8;
-            --chip-hover: #dde9f3;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
-            min-height: 100vh;
-            padding: 0;
-            color: var(--ink);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .container {
-            max-width: 1800px;
-            margin: 0 auto;
-            width: 100%;
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background: white;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(43, 108, 176, 0.06);
-            text-align: center;
-            width: 100%;
-        }
-
-        h1 {
-            font-size: 22px;
-            font-weight: 600;
-            color: #2c5282;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .section-container {
-            background: rgba(255, 255, 255, 0.55);
-            border: 1px solid rgba(255,255,255,0.7);
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(43, 108, 176, 0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .section-header {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 16px;
-            text-align: center;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-        }
-
-        .subsections-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            flex: 1;
-        }
-
-        .bloc {
-            background: white;
-            border-radius: 16px;
-            padding: 22px;
-            box-shadow: 0 4px 20px rgba(43, 108, 176, 0.07);
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
-
-        .bloc-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border);
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .questions-container { flex: 1; overflow-y: auto; min-height: 0; }
-        .questions-container::-webkit-scrollbar { width: 4px; }
-        .questions-container::-webkit-scrollbar-track { background: transparent; }
-        .questions-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-        .question {
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #eef3f8;
-        }
-        .question:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-
-        .question-text {
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 10px;
-            color: var(--ink-soft);
-            line-height: 1.35;
-        }
-
-        .options { display: flex; gap: 7px; }
-
-        .option-btn {
-            flex: 1;
-            padding: 10px;
-            border: 1.5px solid var(--border);
-            background: var(--chip);
-            border-radius: 9px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            color: var(--ink-soft);
-        }
-        .option-btn:hover {
-            background: var(--chip-hover);
-            border-color: #4299e1;
-            transform: translateY(-1px);
-        }
-        .option-btn.selected {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-            border-color: transparent;
-            color: white;
-            box-shadow: 0 4px 14px rgba(66, 153, 225, 0.35);
-            transform: translateY(-1px);
-        }
-
-        .control-cards { display: flex; flex-direction: column; gap: 16px; flex: 1; overflow-y: auto; }
-
-        .control-card {
-            background: linear-gradient(135deg, #f3f9fb 0%, #eef5fa 100%);
-            padding: 18px;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-
-        .control-card h3 {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--primary-dark);
-        }
-
-        .control-text { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
-
-        .scale { display: flex; gap: 7px; margin-bottom: 6px; }
-
-        .scale-btn {
-            flex: 1;
-            padding: 10px;
-            border: 1.5px solid var(--border);
-            background: white;
-            border-radius: 9px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            color: var(--ink-soft);
-        }
-        .scale-btn:hover {
-            border-color: #4299e1;
-            transform: translateY(-1px);
-        }
-        .scale-btn.selected {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-            border-color: transparent;
-            color: white;
-            box-shadow: 0 4px 14px rgba(66, 153, 225, 0.35);
-            transform: translateY(-1px);
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-        .synthesis-bar { display: flex; align-items: stretch; gap: 16px; margin-bottom: 16px; }
-
-        .synthesis-display {
-            flex: 1;
-            background: white;
-            padding: 18px 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(43, 108, 176, 0.07);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .synthesis-text {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
-            text-align: center;
-            letter-spacing: 0.3px;
-        }
-
-        .synthesis-actions { display: flex; gap: 12px; align-items: stretch; flex-shrink: 0; }
-
-        .action-btn {
-            border: none;
-            border-radius: 14px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            color: white;
-            padding: 0 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
-        .action-btn svg { width: 16px; height: 16px; stroke: white; stroke-width: 2; fill: none; }
-
-        .copy-all-btn {
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-            box-shadow: 0 4px 14px rgba(66, 153, 225, 0.35);
-        }
-        .copy-all-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 20px rgba(66, 153, 225, 0.45); }
-        .copy-all-btn.blink { animation: blink 1s ease-in-out 3; }
-
-        .reset-btn {
-            background: white;
-            color: var(--muted);
-            border: 1.5px solid var(--border);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .reset-btn:hover { transform: translateY(-2px); color: #e53e3e; border-color: #feb2b2; }
-
-        @media (max-width: 768px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .synthesis-bar { flex-direction: column; }
-            .synthesis-actions { justify-content: center; }
-            .action-btn { flex: 1; padding: 14px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://amblyup.com/apps/strabisme-divergent-intermittent">
+<title>L’application a changé d’adresse</title>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef5f8;
+    --surface: #ffffff;
+    --text: #2b4a5c;
+    --muted: #5d7684;
+    --teal: #3fbfb0;
+    --blue: #2f8fd8;
+    --border: #d6e6ec;
+    --link-bg: #f2f8fa;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12232b;
+      --surface: #1a2f39;
+      --text: #e3eef2;
+      --muted: #a3bcc7;
+      --teal: #4fd0c1;
+      --blue: #5aaaf0;
+      --border: #2c4652;
+      --link-bg: #15282f;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Ubuntu", "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: linear-gradient(90deg, var(--teal), var(--blue));
+    height: 8px;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    max-width: 600px;
+    width: 100%;
+    padding: 2.5rem 2.25rem;
+  }
+  .logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--blue);
+    margin: 0 0 2rem;
+  }
+  .logo span { color: var(--teal); }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 0 0 1.25rem;
+  }
+  p {
+    line-height: 1.65;
+    margin: 0 0 1rem;
+    color: var(--muted);
+  }
+  .new-url {
+    display: block;
+    background: var(--link-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    color: var(--text);
+    word-break: break-all;
+  }
+  .btn {
+    display: inline-block;
+    background: var(--teal);
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+  }
+  .btn:hover { background: var(--blue); }
+  .btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  .cta { text-align: center; }
+  .note {
+    font-size: 0.9rem;
+    margin-top: 1.75rem;
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Évaluation des strabismes divergents intermittents</h1>
-    </header>
-    <div class="container">
+<header></header>
+<main>
+  <div class="card">
+    <h1>L’application a changé d’adresse</h1>
 
-        <div class="main-grid">
-            <!-- Section Questionnaire qualité de vie -->
-            <div class="section-container">
-                <div class="section-header">Questionnaire qualité de vie</div>
-                <div class="subsections-grid">
-                    <div class="bloc">
-                        <div class="bloc-title">Impact psychosocial (VS)</div>
-                        <div class="questions-container">
-                            <div class="question">
-                                <div class="question-text">Tu te rends compte que ton œil part parfois ?</div>
-                                <div class="options">
-                                    <button class="option-btn" onclick="selectOption('vs', 0, 0)">Non</button>
-                                    <button class="option-btn" onclick="selectOption('vs', 0, 1)">Rarement</button>
-                                    <button class="option-btn" onclick="selectOption('vs', 0, 2)">Souvent</button>
-                                </div>
-                            </div>
-                            <div class="question">
-                                <div class="question-text">Est-ce que ça te gêne ?</div>
-                                <div class="options">
-                                    <button class="option-btn" onclick="selectOption('vs', 1, 0)">Non</button>
-                                    <button class="option-btn" onclick="selectOption('vs', 1, 1)">Rarement</button>
-                                    <button class="option-btn" onclick="selectOption('vs', 1, 2)">Souvent</button>
-                                </div>
-                            </div>
-                            <div class="question">
-                                <div class="question-text">Est-ce que les autres t'en parlent ?</div>
-                                <div class="options">
-                                    <button class="option-btn" onclick="selectOption('vs', 2, 0)">Non</button>
-                                    <button class="option-btn" onclick="selectOption('vs', 2, 1)">Rarement</button>
-                                    <button class="option-btn" onclick="selectOption('vs', 2, 2)">Souvent</button>
-                                </div>
-                            </div>
-                            <div class="question">
-                                <div class="question-text">Tu évites de regarder les gens dans les yeux ?</div>
-                                <div class="options">
-                                    <button class="option-btn" onclick="selectOption('vs', 3, 0)">Non</button>
-                                    <button class="option-btn" onclick="selectOption('vs', 3, 1)">Rarement</button>
-                                    <button class="option-btn" onclick="selectOption('vs', 3, 2)">Souvent</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <p>Afin de vous proposer un outil plus fiable et sécurisé, l’application est désormais hébergée sur notre site AmblyUp. Elle reste entièrement gratuite et fonctionne de la même façon.</p>
 
-                    <div class="bloc">
-                        <div class="bloc-title">Signes fonctionnels (SF)</div>
-                        <div class="questions-container">
-                            <div class="question">
-                                <div class="question-text">Tu fermes un œil à la lumière / dehors ?</div>
-                                <div class="options">
-                                    <button class="option-btn" onclick="selectOption('sf', 0, 0)">Non</button>
-                                    <button class="option-btn" onclick="selectOption('sf', 0, 1)">Rarement</button>
-                                    <button class="option-btn" onclick="selectOption('sf', 0, 2)">Souvent</button>
-                                </div>
-                            </div>
-                            <div class="question">
-                                <div class="question-text">Tu vois double ?</div>
-                                <div class="options">
-                                    <button class="option-btn" onclick="selectOption('sf', 1, 0)">Non</button>
-                                    <button class="option-btn" onclick="selectOption('sf', 1, 1)">Rarement</button>
-                                    <button class="option-btn" onclick="selectOption('sf', 1, 2)">Souvent</button>
-                                </div>
-                            </div>
-                            <div class="question">
-                                <div class="question-text">Tu es gêné(e) pour lire ou regarder un écran ?</div>
-                                <div class="options">
-                                    <button class="option-btn" onclick="selectOption('sf', 2, 0)">Non</button>
-                                    <button class="option-btn" onclick="selectOption('sf', 2, 1)">Rarement</button>
-                                    <button class="option-btn" onclick="selectOption('sf', 2, 2)">Souvent</button>
-                                </div>
-                            </div>
-                            <div class="question">
-                                <div class="question-text">Tu te sens maladroit(e) dans les activités, le sport ou la conduite ?</div>
-                                <div class="options">
-                                    <button class="option-btn" onclick="selectOption('sf', 3, 0)">Non</button>
-                                    <button class="option-btn" onclick="selectOption('sf', 3, 1)">Rarement</button>
-                                    <button class="option-btn" onclick="selectOption('sf', 3, 2)">Souvent</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <p>Nous vous invitons à mettre à jour vos favoris avec la nouvelle adresse :</p>
 
-            <!-- Section Score de contrôle (LACTOSE) -->
-            <div class="section-container">
-                <div class="section-header">Score de contrôle (LACTOSE)</div>
-                <div class="bloc" style="flex: 1;">
-                    <div class="control-cards">
-                        <div class="control-card">
-                            <h3>Loin</h3>
-                            <div class="control-text">Si XXT : après CT alterné pendant 10s, refusionne en :</div>
-                            <div class="scale">
-                                <button class="scale-btn" onclick="selectScale('loin', 0)" data-row="xxt">&lt;1 s</button>
-                                <button class="scale-btn" onclick="selectScale('loin', 1)" data-row="xxt">1–3 s</button>
-                                <button class="scale-btn" onclick="selectScale('loin', 2)" data-row="xxt">3–10 s</button>
-                                <button class="scale-btn" onclick="selectScale('loin', 3)" data-row="xxt">XT</button>
-                            </div>
-                            <div class="control-text" style="margin-top: 12px;">Si XT : après fermeture des yeux 10s:</div>
-                            <div class="scale">
-                                <button class="scale-btn" onclick="selectScaleXT('loin', 3)" data-row="xt">XXT</button>
-                                <button class="scale-btn" onclick="selectScaleXT('loin', 4)" data-row="xt">XT</button>
-                            </div>
-                        </div>
-                        <div class="control-card">
-                            <h3>Près</h3>
-                            <div class="control-text">Si XXT : après CT alterné pendant 10s, refusionne en :</div>
-                            <div class="scale">
-                                <button class="scale-btn" onclick="selectScale('pres', 0)" data-row="xxt">&lt;1 s</button>
-                                <button class="scale-btn" onclick="selectScale('pres', 1)" data-row="xxt">1–3 s</button>
-                                <button class="scale-btn" onclick="selectScale('pres', 2)" data-row="xxt">3–10 s</button>
-                                <button class="scale-btn" onclick="selectScale('pres', 3)" data-row="xxt">XT</button>
-                            </div>
-                            <div class="control-text" style="margin-top: 12px;">Si XT : après fermeture des yeux 10s:</div>
-                            <div class="scale">
-                                <button class="scale-btn" onclick="selectScaleXT('pres', 3)" data-row="xt">XXT</button>
-                                <button class="scale-btn" onclick="selectScaleXT('pres', 4)" data-row="xt">XT</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <span class="new-url">https://amblyup.com/apps/strabisme-divergent-intermittent</span>
 
-        <div class="synthesis-bar">
-            <div class="synthesis-display">
-                <div class="synthesis-text" id="synthesisLine">VS : ---- ; SF : ---- ; SCL : - ; SCP : -</div>
-            </div>
-            <div class="synthesis-actions">
-                <button class="action-btn copy-all-btn" id="copyAll" onclick="copyAll()" title="Copier tout">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
-                    Copier
-                </button>
-                <button class="action-btn reset-btn" onclick="resetAll()">Réinitialiser</button>
-            </div>
-        </div>
-    </div>
+    <div class="cta"><a class="btn" href="https://amblyup.com/apps/strabisme-divergent-intermittent">Accéder à l’application</a></div>
 
-    <script>
-        const state = { vs: [null, null, null, null], sf: [null, null, null, null], loin: null, pres: null };
-
-        function selectOption(category, questionIndex, value) {
-            state[category][questionIndex] = value;
-            const blocIndex = category === 'vs' ? 0 : 1;
-            const bloc = document.querySelectorAll('.bloc')[blocIndex];
-            const question = bloc.querySelector('.questions-container').querySelectorAll('.question')[questionIndex];
-            question.querySelectorAll('.option-btn').forEach((btn, idx) => {
-                btn.classList.toggle('selected', idx === value);
-            });
-            updateSynthesisLine();
-        }
-
-        function selectScale(type, value) {
-            state[type] = value;
-            const card = type === 'loin' ? document.querySelectorAll('.control-card')[0] : document.querySelectorAll('.control-card')[1];
-            const buttons = card.querySelectorAll('.scale-btn');
-            buttons.forEach((btn) => btn.classList.remove('selected'));
-            buttons.forEach((btn) => {
-                const btnValue = parseInt(btn.getAttribute('onclick').match(/\d+\)/)[0]);
-                if (btnValue === value && btn.getAttribute('data-row') === 'xxt') btn.classList.add('selected');
-            });
-            updateSynthesisLine();
-        }
-
-        function selectScaleXT(type, value) {
-            state[type] = value;
-            const card = type === 'loin' ? document.querySelectorAll('.control-card')[0] : document.querySelectorAll('.control-card')[1];
-            const buttons = card.querySelectorAll('.scale-btn');
-            buttons.forEach((btn) => btn.classList.remove('selected'));
-            buttons.forEach((btn) => {
-                const onclickAttr = btn.getAttribute('onclick');
-                if (onclickAttr.includes('selectScaleXT')) {
-                    const btnValue = parseInt(onclickAttr.match(/\d+\)/)[0]);
-                    if (btnValue === value) btn.classList.add('selected');
-                }
-            });
-            updateSynthesisLine();
-        }
-
-        function updateSynthesisLine() {
-            const vsStr = state.vs.map(v => v === null ? '-' : v).join('');
-            const sfStr = state.sf.map(v => v === null ? '-' : v).join('');
-            const sclStr = state.loin === null ? '-' : state.loin;
-            const scpStr = state.pres === null ? '-' : state.pres;
-            document.getElementById('synthesisLine').textContent = `VS : ${vsStr} ; SF : ${sfStr} ; SCL : ${sclStr} ; SCP : ${scpStr}`;
-        }
-
-        function buildFullText() {
-            const labels = ['Conscience de la déviation', 'Gêne ressentie', 'Remarques de l\'entourage', 'Évitement du regard / stratégie de camouflage'];
-            const sfLabels = ['Fermeture d\'un œil au soleil', 'Diplopie', 'Gêne en vision de près (lecture/écrans)', 'Maladresses (activités motrices / sportives / conduite)'];
-            const values = ['Non', 'Rarement', 'Souvent'];
-            const timeLabels = ['0 (< 1 sec.)', '1 (1 à 3 sec.)', '2 (3 à 10 sec.)', '3 (Décompensation fréquente)', '4 (XT constant)'];
-
-            const vsScore = state.vs.reduce((s, v) => s + (v === null ? 0 : v), 0);
-            const sfScore = state.sf.reduce((s, v) => s + (v === null ? 0 : v), 0);
-            const loinScore = state.loin === null ? 0 : state.loin;
-            const presScore = state.pres === null ? 0 : state.pres;
-            const ctrlScore = loinScore + presScore;
-            const globalScore = vsScore + sfScore + ctrlScore;
-
-            let text = 'SCORE DE QUALITÉ DE VIE\n';
-            text += `*Impact psychosocial (Note:${vsScore}/8) :\n`;
-            state.vs.forEach((v, i) => { text += `- ${labels[i]} : ${v === null ? '—' : values[v]}\n`; });
-            text += `\n*Signes fonctionnels (Note:${sfScore}/8) :\n`;
-            state.sf.forEach((v, i) => { text += `- ${sfLabels[i]} : ${v === null ? '—' : values[v]}\n`; });
-            text += `\nSCORE DE CONTRÔLE (Lactose) (Note:${ctrlScore}/8)\n`;
-            text += 'Loin : ' + (state.loin === null ? '—' : timeLabels[state.loin]) + '\n';
-            text += 'Près : ' + (state.pres === null ? '—' : timeLabels[state.pres]) + '\n';
-            const vsStr = state.vs.map(v => v === null ? '-' : v).join('');
-            const sfStr = state.sf.map(v => v === null ? '-' : v).join('');
-            const sclStr = state.loin === null ? '-' : state.loin;
-            const scpStr = state.pres === null ? '-' : state.pres;
-            text += `\nSCORE GLOBAL (Note:${globalScore}/24)\n`;
-            text += `VS : ${vsStr} ; SF : ${sfStr} ; SCL : ${sclStr} ; SCP : ${scpStr}`;
-            return text;
-        }
-
-        function copyAll() {
-            const text = buildFullText();
-            const btn = document.getElementById('copyAll');
-            function feedback(ok) {
-                const original = btn.innerHTML;
-                btn.innerHTML = ok ? 'Copié !' : 'Erreur';
-                btn.classList.add('blink');
-                setTimeout(() => { btn.classList.remove('blink'); btn.innerHTML = original; }, 2000);
-            }
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => feedback(true)).catch(() => fallbackCopy(text, feedback));
-            } else { fallbackCopy(text, feedback); }
-        }
-
-        function fallbackCopy(text, feedback) {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed'; ta.style.left = '-9999px'; ta.style.top = '0';
-            document.body.appendChild(ta);
-            ta.focus(); ta.select();
-            let ok = false;
-            try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-            document.body.removeChild(ta);
-            feedback(ok);
-        }
-
-        function resetAll() {
-            state.vs = [null, null, null, null];
-            state.sf = [null, null, null, null];
-            state.loin = null; state.pres = null;
-            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
-            document.querySelectorAll('.scale-btn').forEach(btn => btn.classList.remove('selected'));
-            updateSynthesisLine();
-        }
-
-        updateSynthesisLine();
-    </script>
+    <p class="note">Pour toute question, vous pouvez nous écrire depuis la page « Nous contacter » du site AmblyUp.</p>
+  </div>
+</main>
 </body>
 </html>
